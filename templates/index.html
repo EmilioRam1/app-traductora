@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>traduttore — ES → IT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper: #f3ece0;
+            --paper-deep: #ebe2d2;
+            --ink: #1a1612;
+            --ink-soft: #5b5147;
+            --accent: #b54a25;
+            --accent-soft: #d97757;
+            --rule: #c8bca6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Fraunces', Georgia, serif;
+            background: var(--paper);
+            color: var(--ink);
+            min-height: 100vh;
+            padding: 3rem 1.5rem 4rem;
+            background-image:
+                radial-gradient(circle at 20% 10%, rgba(181, 74, 37, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(181, 74, 37, 0.03) 0%, transparent 40%);
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--rule);
+            position: relative;
+        }
+
+        .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-family: 'Fraunces', serif;
+            font-weight: 300;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            font-variation-settings: "opsz" 144;
+        }
+
+        h1 em {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--accent);
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--ink-soft);
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        .lang-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            margin-top: 1.5rem;
+            color: var(--ink-soft);
+        }
+
+        .lang-badge .arrow {
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        .examples-section {
+            margin-bottom: 2rem;
+        }
+
+        .examples-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--ink-soft);
+            margin-bottom: 0.75rem;
+        }
+
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .example-chip {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            background: transparent;
+            border: 1px solid var(--rule);
+            color: var(--ink);
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .example-chip:hover {
+            border-color: var(--accent);
+            background: rgba(181, 74, 37, 0.06);
+            color: var(--accent);
+        }
+
+        .panes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 720px) {
+            .panes { grid-template-columns: 1fr; }
+        }
+
+        .pane {
+            background: var(--paper-deep);
+            border: 1px solid var(--rule);
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 220px;
+        }
+
+        .pane-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid var(--rule);
+            background: rgba(0,0,0,0.02);
+        }
+
+        .pane-lang {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--ink-soft);
+        }
+
+        .pane-flag {
+            font-family: 'Fraunces', serif;
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--accent);
+        }
+
+        textarea, .output {
+            flex: 1;
+            font-family: 'Fraunces', serif;
+            font-size: 1.25rem;
+            line-height: 1.45;
+            padding: 1.25rem;
+            background: transparent;
+            color: var(--ink);
+            border: none;
+            outline: none;
+            resize: none;
+            width: 100%;
+        }
+
+        textarea::placeholder {
+            color: var(--ink-soft);
+            font-style: italic;
+            opacity: 0.6;
+        }
+
+        .output {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            min-height: 100%;
+            color: var(--ink);
+        }
+
+        .output.empty {
+            color: var(--ink-soft);
+            font-style: italic;
+            opacity: 0.5;
+        }
+
+        .output.loading {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .output.error {
+            color: #a02020;
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            padding: 0.9rem 2rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 2px;
+        }
+
+        .btn-primary {
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--accent);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--ink-soft);
+            border: 1px solid var(--rule);
+        }
+
+        .btn-ghost:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+        }
+
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--rule);
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--ink-soft);
+            letter-spacing: 0.1em;
+            line-height: 1.8;
+        }
+
+        footer .model {
+            color: var(--accent);
+        }
+
+        /* Loading dots animation */
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .output.loading::after {
+            content: '.';
+            animation: dots 1.2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <header>
+            <div class="eyebrow">CD3002C.601 · Modelos de IA para Datos No Estructurados</div>
+            <h1>il <em>traduttore</em></h1>
+            <div class="subtitle">una pequeña app de traducción</div>
+            <div class="lang-badge">
+                <span>ESPAÑOL</span>
+                <span class="arrow">→</span>
+                <span>ITALIANO</span>
+            </div>
+        </header>
+
+        <section class="examples-section">
+            <div class="examples-label">ejemplos · clic para usar</div>
+            <div class="examples" id="examples">
+                <button class="example-chip" data-text="Me gusta el fútbol">Me gusta el fútbol</button>
+                <button class="example-chip" data-text="¿Cómo estás?">¿Cómo estás?</button>
+                <button class="example-chip" data-text="¿Qué hora es?">¿Qué hora es?</button>
+            </div>
+        </section>
+
+        <div class="panes">
+            <div class="pane">
+                <div class="pane-header">
+                    <span class="pane-lang">ES · entrada</span>
+                    <span class="pane-flag">español</span>
+                </div>
+                <textarea id="input" placeholder="Escribe en español..." rows="5"></textarea>
+            </div>
+
+            <div class="pane">
+                <div class="pane-header">
+                    <span class="pane-lang">IT · salida</span>
+                    <span class="pane-flag">italiano</span>
+                </div>
+                <div id="output" class="output empty">la traducción aparecerá aquí</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-ghost" id="clearBtn">Limpiar</button>
+            <button class="btn btn-primary" id="translateBtn">Traducir →</button>
+        </div>
+
+        <footer>
+            generado con <span class="model">Qwen/Qwen2-0.5B-Instruct</span><br>
+            corriendo localmente vía 🤗 transformers + flask
+        </footer>
+
+    </div>
+
+    <script>
+        const inputEl = document.getElementById('input');
+        const outputEl = document.getElementById('output');
+        const translateBtn = document.getElementById('translateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const examplesEl = document.getElementById('examples');
+
+        examplesEl.addEventListener('click', (e) => {
+            const btn = e.target.closest('.example-chip');
+            if (!btn) return;
+            inputEl.value = btn.dataset.text;
+            inputEl.focus();
+            translate();
+        });
+
+        clearBtn.addEventListener('click', () => {
+            inputEl.value = '';
+            outputEl.textContent = 'la traducción aparecerá aquí';
+            outputEl.className = 'output empty';
+            inputEl.focus();
+        });
+
+        translateBtn.addEventListener('click', translate);
+
+        inputEl.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+                e.preventDefault();
+                translate();
+            }
+        });
+
+        async function translate() {
+            const text = inputEl.value.trim();
+            if (!text) {
+                inputEl.focus();
+                return;
+            }
+
+            translateBtn.disabled = true;
+            outputEl.textContent = 'traduciendo';
+            outputEl.className = 'output loading';
+
+            try {
+                const res = await fetch('/translate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                });
+                const data = await res.json();
+                if (!res.ok || data.error) {
+                    outputEl.textContent = 'Error: ' + (data.error || 'algo salió mal');
+                    outputEl.className = 'output error';
+                } else {
+                    outputEl.textContent = data.translation || '(respuesta vacía)';
+                    outputEl.className = 'output';
+                }
+            } catch (err) {
+                outputEl.textContent = 'Error de red: ' + err.message;
+                outputEl.className = 'output error';
+            } finally {
+                translateBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
