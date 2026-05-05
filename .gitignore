@@ -1,5 +1,6 @@
 venv/
 README.md
+.claude/
 __pycache__/
 *.pyc
 *.pyo
