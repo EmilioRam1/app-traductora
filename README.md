@@ -2,6 +2,7 @@
 
 🌐 **Demo en vivo:** https://emilioram1.github.io/app-traductora/
 > Corre directo en el navegador, sin servidor. El modelo se descarga la primera vez (~75 MB) y queda en caché.
+<img width="2548" height="1327" alt="image" src="https://github.com/user-attachments/assets/130b9408-7402-424b-ae3e-8b7ffd985202" />
 
 App web pequeña que traduce de **español a italiano** usando el modelo
 **`Qwen/Qwen2-0.5B-Instruct`** corriendo localmente. Backend en Flask,
