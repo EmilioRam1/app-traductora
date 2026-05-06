@@ -1,5 +1,8 @@
 # Traductor ES → IT (HTML interactivo + Qwen2-0.5B-Instruct)
 
+🌐 **Demo en vivo:** https://emilioram1.github.io/app-traductora/
+> Corre directo en el navegador, sin servidor. El modelo se descarga la primera vez (~75 MB) y queda en caché.
+
 App web pequeña que traduce de **español a italiano** usando el modelo
 **`Qwen/Qwen2-0.5B-Instruct`** corriendo localmente. Backend en Flask,
 frontend HTML/CSS/JS (sin frameworks).
@@ -68,13 +71,31 @@ Vas a `http://127.0.0.1:5000` y ya. Puedes:
 
 ---
 
+## Versión estática (GitHub Pages)
+
+`index.html` en la raíz usa **Transformers.js** para correr el modelo
+**`Helsinki-NLP/opus-mt-es-it`** directo en el navegador, sin backend.
+
+```
+[ Browser ]
+   │  escribe texto en español
+   ▼
+[ Transformers.js · Xenova/opus-mt-es-it · ONNX en WebAssembly ]
+   │  inference local en el navegador
+   ▼
+[ Browser ]   traduzione in italiano
+```
+
+---
+
 ## Archivos
 
 ```
 app-traductora/
-├── app.py              # backend Flask + carga del modelo
+├── index.html          # versión estática (GitHub Pages, sin servidor)
+├── app.py              # backend Flask + Qwen2 (versión local)
 ├── templates/
-│   └── index.html      # UI interactiva (1 sola página)
+│   └── index.html      # UI para la versión Flask
 ├── requirements.txt    # flask, transformers, torch, accelerate
 └── README.md
 ```
